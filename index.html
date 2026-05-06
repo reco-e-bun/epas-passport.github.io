@@ -51,7 +51,7 @@
             justify-content: center;
             align-items: center;
             gap: 15px;
-            padding: 20px 0 40px 0;
+            padding: 20px 0 20px 0;
             text-align: center;
         }
 
@@ -160,7 +160,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 30px 10px 10px 10px;
+            padding: 10px 10px 10px 10px;
         }
 
         button {
@@ -242,8 +242,7 @@
         const countries = ["austria","belgium","bulgaria","croatia","cyprus","czechia","denmark","estonia","finland","france","germany","greece","hungary","ireland","italy","latvia","lithuania","luxembourg","malta","netherlands","poland","portugal","romania","slovakia","slovenia","spain","sweden"]
 
         const TOTAL_PAGES = 4;
-        let currentPage = Math.floor(visas.length / 7) + 1;
-        console.log(currentPage)
+        let currentPage = Math.floor((visas.length - 1) / 7) + 1;
 
         // Generate EU Stars
         function generateEUStars() {
@@ -339,7 +338,6 @@
         const nextBtn = document.getElementById('nextBtn');
         const pageIndicator = document.getElementById('pageIndicator');
         
-        console.log(currentPage)
 
         function updateSlider() {
             slider.style.transform = `translateX(-${(currentPage - 1) * 100}%)`;
