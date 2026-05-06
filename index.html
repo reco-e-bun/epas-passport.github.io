@@ -27,14 +27,18 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            /* Use dvh for mobile browsers with vh as a fallback */
+            height: 100vh;
+            height: 100dvh;
             overflow: hidden;
         }
 
         .passport-app {
             width: 100%;
             max-width: 420px;
+            /* Use dvh for mobile browsers with vh as a fallback */
             height: 100vh;
+            height: 100dvh;
             max-height: 850px;
             display: flex;
             flex-direction: column;
@@ -310,8 +314,6 @@
             const pagePlacements = placements.filter(p => p.page === i);
 
             pagePlacements.forEach((slot, index) => {
-                // Mock logic: 70% chance a visa is populated, 30% chance it stays empty
-                // const hasVisa = Math.random() > 0;
                 
                 let contentHTML = '';
                 if ((i - 1) * 7 + index < visas.length && countries.includes(visas[(i - 1) * 7 + index])) {
