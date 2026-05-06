@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <script>
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        var queryDict = {}
+        location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]})
+
+        const countries = ["austria","belgium","bulgaria","croatia","cyprus","czechia","denmark","estonia","finland","france","germany","greece","hungary","ireland","italy","latvia","lithuania","luxembourg","malta","netherlands","poland","portugal","romania","slovakia","slovenia","spain","sweden"]
+
+        if (countries.includes(queryDict["country"])){
+            let acquiredVisasCookie = getCookie("acquiredVisas")
+            
+            if (acquiredVisasCookie.search(queryDict["country"]) === -1){
+                if (acquiredVisasCookie != ""){
+                    acquiredVisasCookie += "|"
+                }
+                acquiredVisasCookie += queryDict["country"]
+                document.cookie = `acquiredVisas=${acquiredVisasCookie}; expires=Thu, 18 Dec 2027 12:00:00 UTC;`
+            }
+        }
+
+        window.location.replace("index.html")
+    </script>
+</body>
+</html>
