@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>European Union Passport Simulation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EU Passport</title>
     <style>
         :root {
             --bg-color: #1a2232;
@@ -12,6 +12,8 @@
             --text-white: #ffffff;
             --text-gray: #888888;
             --placeholder-color: rgba(0, 0, 0, 0.15);
+            touch-action: pan-x pan-y;
+            height: 100%;
         }
 
         * {
@@ -160,7 +162,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 10px 10px 10px;
+            padding: 5px 10px 0 10px;
         }
 
         button {
@@ -188,6 +190,72 @@
             font-weight: bold;
             letter-spacing: 2px;
         }
+
+        /* --- Modal Styles --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 34, 50, 0.85); /* Matches --bg-color but transparent */
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: var(--paper-color);
+            padding: 30px;
+            border-radius: 6px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            max-width: 80%;
+            border: 2px solid var(--text-gold);
+        }
+
+        .modal-content h3 {
+            color: var(--text-gold);
+            margin-bottom: 15px;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+
+        .modal-content p {
+            font-family: "Courier New", Courier, monospace;
+            font-weight: bold;
+            color: #444;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .modal-btn {
+            background-color: var(--bg-color);
+            color: var(--text-gold);
+            border: 1px solid var(--text-gold);
+            padding: 8px 24px;
+            font-size: 14px;
+            border-radius: 4px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+        }
+
+        .modal-btn:hover {
+            background-color: var(--text-gold);
+            color: var(--bg-color);
+        }
+
+        /* --- Created By --- */
+        .created-by {
+            text-align: center;
+            font-size: clamp(10px, 1.8vw, 12px);
+            color: rgba(255, 255, 255, 0.45);
+            padding-bottom: 8px;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
@@ -212,6 +280,18 @@
             <div class="indicator" id="pageIndicator">01 / 04</div>
             <button id="nextBtn">&#10095;</button>
         </footer>
+
+        <div class="created-by">
+            Created by Tega George-Mihai
+        </div>
+    </div>
+
+    <div id="completion-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>CONGRATULATIONS!</h3>
+            <p>You have acquired all visas!</p>
+            <button id="close-modal-btn" class="modal-btn">CLOSE</button>
+        </div>
     </div>
 
     <script>
@@ -242,7 +322,7 @@
         const countries = ["austria","belgium","bulgaria","croatia","cyprus","czechia","denmark","estonia","finland","france","germany","greece","hungary","ireland","italy","latvia","lithuania","luxembourg","malta","netherlands","poland","portugal","romania","slovakia","slovenia","spain","sweden"]
 
         const TOTAL_PAGES = 4;
-        let currentPage = Math.floor((visas.length - 1) / 7) + 1;
+        let currentPage = Math.max(Math.floor((visas.length - 1) / 7) + 1, 1);
 
         // Generate EU Stars
         function generateEUStars() {
@@ -361,6 +441,20 @@
                 updateSlider();
             }
         });
+
+        // --- Check for "completed=true" GET parameter and trigger Modal ---
+        var queryDict = {}
+        location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]})
+        if (queryDict["completed"] === 'true') {
+            document.getElementById('completion-modal').style.display = 'flex';
+        }
+
+        document.getElementById('close-modal-btn').addEventListener('click', () => {
+            document.getElementById('completion-modal').style.display = 'none';
+            // Optionally, clean the URL so it doesn't pop up again on refresh:
+            window.history.replaceState(null, null, window.location.pathname);
+        });
+        
 
     </script>
 </body>

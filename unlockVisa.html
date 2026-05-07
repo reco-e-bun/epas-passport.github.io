@@ -27,9 +27,9 @@
 
         const countries = ["austria","belgium","bulgaria","croatia","cyprus","czechia","denmark","estonia","finland","france","germany","greece","hungary","ireland","italy","latvia","lithuania","luxembourg","malta","netherlands","poland","portugal","romania","slovakia","slovenia","spain","sweden"]
 
+        let acquiredVisasCookie = getCookie("acquiredVisas")
+
         if (countries.includes(queryDict["country"])){
-            let acquiredVisasCookie = getCookie("acquiredVisas")
-            
             if (acquiredVisasCookie.search(queryDict["country"]) === -1){
                 if (acquiredVisasCookie != ""){
                     acquiredVisasCookie += "|"
@@ -39,7 +39,23 @@
             }
         }
 
-        window.location.replace("index.html")
-    </script>
+        if (acquiredVisasCookie === ""){
+            validVisas = 0
+        }else{
+            visas = Array.from(new Set(getCookie("acquiredVisas").split("|")))
+            validVisas = 0
+            visas.forEach(visa => {
+                if (countries.includes(visa)){
+                    validVisas += 1
+                }
+            });
+        }
+
+        if (validVisas >= 26){
+            window.location.replace("index.html?completed=true")
+        }else{
+            window.location.replace("index.html")
+        }
+        </script>
 </body>
 </html>
